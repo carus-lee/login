@@ -1,7 +1,7 @@
 package hello.login.web.login;
 
-import java.util.Optional;
-
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.stereotype.Controller;
@@ -29,7 +29,7 @@ public class LoginController {
 	}
 	
 	@PostMapping("/login")
-	public String login(@Valid @ModelAttribute LoginForm form, BindingResult bindingResult)
+	public String login(@Valid @ModelAttribute LoginForm form, BindingResult bindingResult, HttpServletResponse response)
 	{
 		if (bindingResult.hasErrors())
 		{
@@ -45,6 +45,25 @@ public class LoginController {
 		}
 		
 		// 로그인 성공 처리 TODO
+		// 쿠키에 시간정보를 주지 않으면 세션 쿠키 (브라우저 종료시 쿠키 제거)
+		Cookie idCookie = new Cookie("memberId", String.valueOf(loginMember.getId()));
+		response.addCookie(idCookie);
+		
 		return "redirect:/";
+	}
+	
+	@PostMapping("/logout")
+	public String logout(HttpServletResponse response)
+	{
+		expireCookie(response, "memberId");
+		return "redirect:/";
+	}
+	
+	// 쿠키 삭제
+	private void expireCookie(HttpServletResponse response, String cookieName)
+	{
+		Cookie cookie = new Cookie(cookieName, null);
+		cookie.setMaxAge(0);
+		response.addCookie(cookie);
 	}
 }
