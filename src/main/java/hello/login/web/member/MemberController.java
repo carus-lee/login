@@ -1,4 +1,4 @@
-package hello.login.web;
+package hello.login.web.member;
 
 import javax.validation.Valid;
 
