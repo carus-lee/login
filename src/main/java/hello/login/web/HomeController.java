@@ -1,6 +1,7 @@
 package hello.login.web;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -45,7 +46,7 @@ public class HomeController {
     	return "loginHome";
     }
     
-    @GetMapping("/")
+//    @GetMapping("/")
     public String homeLoginV2(HttpServletRequest request, Model model)
     {
     	//세션 관리자에 지정된 회원정보 조회
@@ -57,6 +58,28 @@ public class HomeController {
     		return "home";
     	}
     	
+    	model.addAttribute("member", member);
+    	return "loginHome";
+    }
+    
+    @GetMapping("/")
+    public String homeLoginV3(HttpServletRequest request, Model model)
+    {
+    	HttpSession session = request.getSession(false);
+    	if (session == null)
+    	{
+    		return "home";
+    	}
+    	
+    	Member member = (Member)session.getAttribute(SessionConst.LOGIN_MEMBER);
+    	
+    	//세션에 회원정보가 없으면 home
+    	if (member == null)
+    	{
+    		return "home";
+    	}
+    	
+    	//세션이 있다면 로그인홈
     	model.addAttribute("member", member);
     	return "loginHome";
     }
