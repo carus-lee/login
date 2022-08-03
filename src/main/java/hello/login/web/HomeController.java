@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 import hello.login.domain.member.Member;
 import hello.login.domain.member.MemberRepository;
@@ -30,6 +31,9 @@ public class HomeController {
 //    @GetMapping("/")
     public String homeLogin(@CookieValue(name = "memberId", required = false) Long memberId, Model model)
     {
+    	/*
+    	 * 저장소에서 회원정보 조회
+    	 */
     	if (memberId == null)
     	{
     		return "home";
@@ -62,9 +66,12 @@ public class HomeController {
     	return "loginHome";
     }
     
-    @GetMapping("/")
+//    @GetMapping("/")
     public String homeLoginV3(HttpServletRequest request, Model model)
     {
+    	/*
+    	 * 서블릿에서 제공하는 HpptSession으로 세션(회원)정보 조회
+    	 */
     	HttpSession session = request.getSession(false);
     	if (session == null)
     	{
@@ -72,6 +79,25 @@ public class HomeController {
     	}
     	
     	Member member = (Member)session.getAttribute(SessionConst.LOGIN_MEMBER);
+    	
+    	//세션에 회원정보가 없으면 home
+    	if (member == null)
+    	{
+    		return "home";
+    	}
+    	
+    	//세션이 있다면 로그인홈
+    	model.addAttribute("member", member);
+    	return "loginHome";
+    }
+    
+    @GetMapping("/")
+    public String homeLoginV3Spring(
+    		@SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member, Model model)
+    {
+    	/*
+    	 * 스프링에서 지원하는 @SessionAttribute으로 세션(회원)정보 조회 
+    	 */
     	
     	//세션에 회원정보가 없으면 home
     	if (member == null)
