@@ -36,7 +36,7 @@ public class LoginCheckFilter implements Filter {
 		
 		try
 		{
-			log.info("로그 체크필터 시작 {}", requestURI);
+			log.info("인증 체크필터 시작 {}", requestURI);
 			
 			if (isLoginCheckPath(requestURI))
 			{
@@ -45,6 +45,7 @@ public class LoginCheckFilter implements Filter {
 				if (session == null || session.getAttribute(SessionConst.LOGIN_MEMBER) == null)
 				{
 					log.info("미인증 사용자 요청 {}", requestURI);
+					
 					// 로그인페이지로 리다이렉트
 					httpResponse.sendRedirect("/login?redirectURL=" + requestURI);
 					
