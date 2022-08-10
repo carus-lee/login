@@ -19,8 +19,6 @@ import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Configuration
-@NoArgsConstructor
 public class LoginCheckFilter implements Filter {
 	
 	private static final String[] whiteList = {"/", "/members/add", "/login", "/logout", "/css/*"};

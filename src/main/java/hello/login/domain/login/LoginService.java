@@ -1,7 +1,5 @@
 package hello.login.domain.login;
 
-import java.util.Optional;
-
 import org.springframework.stereotype.Service;
 
 import hello.login.domain.member.Member;
