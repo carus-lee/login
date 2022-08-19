@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 
 import hello.login.domain.member.Member;
 import hello.login.domain.member.MemberRepository;
+import hello.login.web.argumentresolver.Login;
 import hello.login.web.session.SessionManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -91,9 +92,27 @@ public class HomeController {
     	return "loginHome";
     }
     
-    @GetMapping("/")
+//    @GetMapping("/")
     public String homeLoginV3Spring(
     		@SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member, Model model)
+    {
+    	/*
+    	 * 스프링에서 지원하는 @SessionAttribute으로 세션(회원)정보 조회 
+    	 */
+    	
+    	//세션에 회원정보가 없으면 home
+    	if (member == null)
+    	{
+    		return "home";
+    	}
+    	
+    	//세션이 있다면 로그인홈
+    	model.addAttribute("member", member);
+    	return "loginHome";
+    }
+    
+    @GetMapping("/")
+    public String homeLoginV3ArgumentResolver(@Login Member member, Model model)
     {
     	/*
     	 * 스프링에서 지원하는 @SessionAttribute으로 세션(회원)정보 조회 
